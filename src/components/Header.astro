@@ -4,11 +4,14 @@ import { SITE_TITLE } from '../consts';
 ---
 
 <header>
-	<h2>{SITE_TITLE}</h2>
+	<div class="logo-section">
+		<h2 class="site-title">{SITE_TITLE}</h2>
+		<div class="logo-accent"></div>
+	</div>
 	<nav>
 		<HeaderLink href="/">Home</HeaderLink>
 		<HeaderLink href="/blog">Blog</HeaderLink>
-		<HeaderLink href="/about">About</HeaderLink>
+		<HeaderLink href="/about">Sobre</HeaderLink>
 		<HeaderLink href="https://twitter.com/astrodotbuild" target="_blank">Twitter</HeaderLink>
 		<HeaderLink href="https://github.com/withastro/astro" target="_blank">GitHub</HeaderLink>
 	</nav>
@@ -16,32 +19,98 @@ import { SITE_TITLE } from '../consts';
 <style>
 	header {
 		margin: 0;
-		padding: 0 1em;
-		color: var(--text-color);
+		padding: 0;
+		color: var(--text-primary);
+		border-bottom: 1px solid var(--border-muted);
+		padding-bottom: 1.5rem;
+		margin-bottom: 2rem;
 	}
-	h2 {
-		margin: 0.5em 0;
-		color: white;
+
+	.logo-section {
+		position: relative;
+		margin-bottom: 2rem;
 	}
+
+	.site-title {
+		margin: 0;
+		font-size: 1.5rem;
+		font-weight: 700;
+		background: linear-gradient(135deg, var(--text-primary) 0%, var(--neon-purple) 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		position: relative;
+	}
+
+	.logo-accent {
+		width: 40px;
+		height: 2px;
+		background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue));
+		margin-top: 0.5rem;
+		border-radius: 1px;
+		box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+	}
+
 	nav {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
-		gap: 1em;
-		margin-top: 1.5em;
+		gap: 0.75rem;
 	}
-	nav a {
+
+	nav :global(a) {
 		text-decoration: none;
-		color: var(--text-color);
-		border-bottom: 2px solid transparent;
-		transition: border-color 0.2s ease;
+		color: var(--text-secondary);
+		padding: 0.5rem 0;
+		border-radius: 6px;
+		transition: all 0.2s ease;
+		position: relative;
+		font-weight: 500;
+		width: 100%;
+		display: block;
+		padding-left: 0.75rem;
 	}
-	nav a:hover {
-		border-bottom-color: var(--link-color);
-		text-decoration: none;
+
+	nav :global(a::before) {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 2px;
+		height: 0;
+		background: var(--neon-purple);
+		transition: height 0.2s ease;
+		border-radius: 1px;
 	}
-	nav a.active {
-		font-weight: bold;
-		border-bottom-color: var(--link-color);
+
+	nav :global(a:hover) {
+		color: var(--text-primary);
+		background: rgba(139, 92, 246, 0.05);
+		text-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+	}
+
+	nav :global(a:hover::before) {
+		height: 60%;
+		box-shadow: 0 0 4px rgba(139, 92, 246, 0.4);
+	}
+
+	nav :global(a.active) {
+		color: var(--neon-purple);
+		background: rgba(139, 92, 246, 0.1);
+		text-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+	}
+
+	nav :global(a.active::before) {
+		height: 80%;
+		box-shadow: 0 0 6px rgba(139, 92, 246, 0.5);
+	}
+
+	/* External link indicator */
+	nav :global(a[target="_blank"]::after) {
+		content: '↗';
+		margin-left: 0.25rem;
+		font-size: 0.75rem;
+		opacity: 0.6;
 	}
 </style>

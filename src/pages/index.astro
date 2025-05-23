@@ -1,47 +1,279 @@
 ---
 import SidebarLayout from "../layouts/SidebarLayout.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import HeroSection from "../components/HeroSection.astro";
+
 ---
 
 <SidebarLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-  <h1>🧑‍🚀 Hello, Astronaut!</h1>
-  <p>
-    Welcome to the official <a href="https://astro.build/">Astro</a> blog starter
-    template. This template serves as a lightweight, minimally-styled starting point
-    for anyone looking to build a personal website, blog, or portfolio with Astro.
-  </p>
-  <p>
-    This template comes with a few integrations already configured in your
-    <code>astro.config.mjs</code> file. You can customize your setup with
-    <a href="https://astro.build/integrations">Astro Integrations</a> to add tools
-    like Tailwind, React, or Vue to your project.
-  </p>
-  <p>Here are a few ideas on how to get started with the template:</p>
-  <ul>
-    <li>Edit this page in <code>src/pages/index.astro</code></li>
-    <li>
-      Edit the site header items in <code>src/components/Header.astro</code>
-    </li>
-    <li>
-      Add your name to the footer in <code>src/components/Footer.astro</code>
-    </li>
-    <li>Check out the included blog posts in <code>src/content/blog/</code></li>
-    <li>
-      Customize the blog post page layout in <code
-        >src/layouts/BlogPost.astro</code
-      >
-    </li>
-  </ul>
-  <p>
-    Have fun! If you get stuck, remember to
-    <a href="https://docs.astro.build/">read the docs</a>
-    or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-  </p>
-  <p>
-    Looking for a blog template with a bit more personality? Check out
-    <a href="https://github.com/Charca/astro-blog-template"
-      >astro-blog-template</a
-    >
-    by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-  </p>
+  <HeroSection />
+  
+  <section id="features" class="features-section">
+    <div class="container">
+      <h2 class="section-title">Por que escolher o Flashdeck?</h2>
+      <div class="features-grid">
+        <div class="feature-card card-neon">
+          <div class="feature-icon">🎯</div>
+          <h3>Aprendizado Personalizado</h3>
+          <p>Algoritmos inteligentes adaptam o conteúdo ao seu ritmo de aprendizado</p>
+        </div>
+        <div class="feature-card card-neon">
+          <div class="feature-icon">📊</div>
+          <h3>Análise de Progresso</h3>
+          <p>Acompanhe seu desenvolvimento com métricas detalhadas e insights</p>
+        </div>
+        <div class="feature-card card-neon">
+          <div class="feature-icon">🔄</div>
+          <h3>Revisão Inteligente</h3>
+          <p>Sistema de repetição espaçada para maximizar a retenção</p>
+        </div>
+        <div class="feature-card card-neon">
+          <div class="feature-icon">🌙</div>
+          <h3>Modo Escuro</h3>
+          <p>Interface moderna e confortável para estudar a qualquer hora</p>
+        </div>
+        <div class="feature-card card-neon">
+          <div class="feature-icon">📚</div>
+          <h3>Organização do Material Estudado</h3>
+          <p>Mantenha todo seu conteúdo organizado em categorias e temas específicos</p>
+        </div>
+        <div class="feature-card card-neon">
+          <div class="feature-icon">🔁</div>
+          <h3>Estrutura de Repetição por Deck</h3>
+          <p>Organize seus flashcards em decks temáticos com ciclos de revisão personalizados</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Pronto para revolucionar seus estudos?</h2>
+        <p>Junte-se a estudantes que já transformaram sua forma de revisar</p>
+        <a href="/login" class="btn-neon">Começar Gratuitamente</a>
+      </div>
+    </div>
+  </section>
 </SidebarLayout>
+
+<style>
+  /* Features Section */
+  .features-section {
+    padding: 6rem 0;
+    position: relative;
+    background: var(--bg-primary);
+  }
+
+  .features-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-neon), transparent);
+    opacity: 0.5;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    text-align: center;
+    margin-bottom: 4rem;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--neon-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-purple), transparent);
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .feature-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-neon);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+  }
+
+  .feature-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .feature-card:hover {
+    border-color: var(--border-neon);
+    box-shadow: 
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(139, 92, 246, 0.2);
+    transform: translateY(-5px);
+  }
+
+  .feature-card:hover::before {
+    opacity: 1;
+  }
+
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.3));
+  }
+
+  .feature-card h3 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .feature-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: 6rem 0;
+    background: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+    z-index: 0;
+  }
+
+  .cta-content {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-content h2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--neon-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cta-content p {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Animation keyframes */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+    }
+  }
+
+  .feature-card:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  .feature-card:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .feature-card:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  .feature-card:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .features-section,
+    .cta-section {
+      padding: 4rem 0;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+    }
+  }
+</style>

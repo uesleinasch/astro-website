@@ -3,14 +3,59 @@ const today = new Date();
 ---
 
 <footer>
-	&copy; {today.getFullYear()} FlashDeck. All rights reserved.
+	<div class="footer-content">
+		<div class="footer-gradient"></div>
+		<p>&copy; {today.getFullYear()} FlashDeck. Todos os direitos reservados.</p>
+		<p class="footer-tagline">Transformando a forma como você aprende</p>
+	</div>
 </footer>
 <style>
 	footer {
-		padding: 2em 0;
-		color: #888;
+		padding: 3rem 0 2rem;
 		text-align: center;
-		border-top: 1px solid var(--border-color);
-		margin-top: 3em;
+		border-top: 1px solid var(--border-muted);
+		margin-top: 4rem;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.footer-content {
+		position: relative;
+		z-index: 1;
+	}
+
+	.footer-gradient {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: linear-gradient(90deg, transparent, var(--border-neon), transparent);
+		opacity: 0.5;
+	}
+
+	footer p {
+		color: var(--text-muted);
+		margin: 0.5rem 0;
+		font-size: 0.875rem;
+	}
+
+	.footer-tagline {
+		color: var(--text-secondary);
+		font-style: italic;
+		opacity: 0.8;
+	}
+
+	footer::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 100px;
+		height: 100px;
+		background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+		border-radius: 50%;
+		pointer-events: none;
 	}
 </style>

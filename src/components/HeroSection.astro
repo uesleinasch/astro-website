@@ -1,0 +1,545 @@
+<div class="hero-section" id="heroSection">
+  <div class="hero-background">
+    <div class="gradient-overlay"></div>
+    <div class="particle-field"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-text">✨ Revolucione seus estudos</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="title-main">Flashdeck</span>
+      <span class="title-accent">Pro</span>
+    </h1>
+    <h2 class="hero-subtitle">Agora ficou fácil revisar seus estudos</h2>
+    <p class="hero-description">
+      O Flashdeck é o seu assistente pessoal de revisão de estudos!<br>
+      Tenha o controle completo dos seus estudos centralizados em uma única plataforma.
+    </p>
+    <div class="hero-buttons">
+      <a href="/login" class="btn-primary">
+        <span>Começar Agora</span>
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+        </svg>
+      </a>
+      <a href="#features" class="btn-secondary">
+        <span>Explorar Recursos</span>
+      </a>
+    </div>
+    <div class="hero-stats" style="display: none;">
+      <div class="stat">
+        <span class="stat-number">10K+</span>
+        <span class="stat-label">Estudantes</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">50K+</span>
+        <span class="stat-label">Flashcards</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">95%</span>
+        <span class="stat-label">Aprovação</span>
+      </div>
+    </div>
+  </div>
+  <div class="floating-elements">
+    <div class="floating-card card-1">📚</div>
+    <div class="floating-card card-2">🎯</div>
+    <div class="floating-card card-3">⚡</div>
+    <div class="floating-card card-4">🚀</div>
+  </div>
+</div>
+
+<script>
+  class ParticleSystem {
+    private canvas: HTMLCanvasElement;
+    private ctx: CanvasRenderingContext2D;
+    private particles: Particle[] = [];
+    private animationId: number = 0;
+
+    constructor(container: HTMLElement) {
+      this.canvas = document.createElement('canvas');
+      this.ctx = this.canvas.getContext('2d')!;
+      
+      this.setupCanvas(container);
+      this.createParticles();
+      this.animate();
+      this.setupResize();
+    }
+
+    private setupCanvas(container: HTMLElement): void {
+      this.canvas.style.position = 'absolute';
+      this.canvas.style.top = '0';
+      this.canvas.style.left = '0';
+      this.canvas.style.pointerEvents = 'none';
+      this.canvas.style.zIndex = '1';
+      
+      this.resizeCanvas();
+      container.appendChild(this.canvas);
+    }
+
+    private resizeCanvas(): void {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+    }
+
+    private setupResize(): void {
+      window.addEventListener('resize', () => {
+        this.resizeCanvas();
+      });
+    }
+
+    private createParticles(): void {
+      const particleCount = Math.floor((this.canvas.width * this.canvas.height) / 15000);
+      
+      for (let i = 0; i < particleCount; i++) {
+        this.particles.push(new Particle(this.canvas.width, this.canvas.height));
+      }
+    }
+
+    private animate(): void {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      
+      this.particles.forEach(particle => {
+        particle.update();
+        particle.draw(this.ctx);
+      });
+
+      this.animationId = requestAnimationFrame(() => this.animate());
+    }
+
+    public destroy(): void {
+      if (this.animationId) {
+        cancelAnimationFrame(this.animationId);
+      }
+      this.canvas.remove();
+    }
+  }
+
+  class Particle {
+    private x: number;
+    private y: number;
+    private vx: number;
+    private vy: number;
+    private size: number;
+    private opacity: number;
+    private maxX: number;
+    private maxY: number;
+
+    constructor(maxX: number, maxY: number) {
+      this.maxX = maxX;
+      this.maxY = maxY;
+      this.x = Math.random() * maxX;
+      this.y = Math.random() * maxY;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.size = Math.random() * 2 + 0.5;
+      this.opacity = Math.random() * 0.3 + 0.1;
+    }
+
+    public update(): void {
+      this.x += this.vx;
+      this.y += this.vy;
+
+      if (this.x < 0 || this.x > this.maxX) this.vx *= -1;
+      if (this.y < 0 || this.y > this.maxY) this.vy *= -1;
+
+      this.x = Math.max(0, Math.min(this.maxX, this.x));
+      this.y = Math.max(0, Math.min(this.maxY, this.y));
+    }
+
+    public draw(ctx: CanvasRenderingContext2D): void {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(139, 92, 246, ${this.opacity})`;
+      ctx.fill();
+      
+      // Adicionar glow
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = 'rgba(139, 92, 246, 0.3)';
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+   document.addEventListener('DOMContentLoaded', () => {
+    const heroSection = document.getElementById('heroSection');
+    const particleField = document.querySelector('.particle-field');
+    
+    if (heroSection && particleField) {
+      new ParticleSystem(particleField as HTMLElement);
+    }
+
+    // Custom cursor follower
+    if (heroSection) {
+      heroSection.addEventListener('mousemove', (e: MouseEvent) => {
+        const x = e.clientX;
+        const y = e.clientY;
+        
+        heroSection.style.setProperty('--cursor-x', `${x - 12}px`);
+        heroSection.style.setProperty('--cursor-y', `${y - 16}px`);
+      });
+    }
+
+    // Animação dos floating cards
+    const floatingCards = document.querySelectorAll('.floating-card');
+    floatingCards.forEach((card, index) => {
+      const delay = index * 200;
+      // Assegure que 'card' é um HTMLElement para acessar 'classList'
+      const cardElement = card as HTMLElement; 
+      setTimeout(() => {
+        cardElement.classList.add('animate');
+      }, delay);
+    });
+  });
+</script>
+
+<style>
+  .hero-section {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: none; /* Esconde o cursor padrão */
+    --cursor-x: 0px;
+    --cursor-y: 0px;
+  }
+
+  .hero-section::before {
+    content: '';
+    position: fixed;
+    width: 24px;
+    height: 32px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    background: transparent;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    backdrop-filter: blur(2px);
+    box-shadow: 
+      0 0 20px rgba(255, 255, 255, 0.2),
+      inset 0 0 20px rgba(255, 255, 255, 0.1);
+    left: var(--cursor-x);
+    top: var(--cursor-y);
+  }
+
+  .hero-section:hover::before {
+    opacity: 1;
+  }
+
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 30% 40%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 70% 60%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+      linear-gradient(135deg, var(--bg-primary) 0%, rgba(26, 26, 46, 0.8) 50%, rgba(22, 33, 62, 0.9) 100%);
+  }
+
+  .particle-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    padding: 2rem;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .badge-text {
+    color: var(--neon-purple);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+
+  .title-main {
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--neon-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+  }
+
+  .title-accent {
+    color: var(--neon-purple);
+    text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+    margin-left: 0.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+  }
+
+  .hero-description {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    line-height: 1.7;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 4rem;
+  }
+
+  .btn-primary {
+    background: var(--btn-primary-bg);
+    border: 1px solid var(--btn-primary-border);
+    color: var(--text-primary);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 1.125rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary:hover {
+    background: var(--btn-primary-hover);
+    border-color: var(--neon-purple);
+    box-shadow: 
+      0 0 30px rgba(139, 92, 246, 0.4),
+      0 10px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    color: var(--text-primary);
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-primary:hover::before {
+    left: 100%;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border-default);
+    color: var(--text-secondary);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 1.125rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--border-neon);
+    color: var(--text-primary);
+    box-shadow: var(--glow-soft);
+    transform: translateY(-1px);
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--neon-purple);
+    text-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+  }
+
+  .stat-label {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .floating-card {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+  }
+
+  .floating-card.animate {
+    opacity: 1;
+    transform: translateY(0);
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .card-1 {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+  }
+
+  .card-2 {
+    top: 30%;
+    right: 15%;
+    animation-delay: -2s;
+  }
+
+  .card-3 {
+    bottom: 30%;
+    left: 15%;
+    animation-delay: -4s;
+  }
+
+  .card-4 {
+    bottom: 20%;
+    right: 10%;
+    animation-delay: -1s;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-content {
+      padding: 1rem;
+    }
+
+    .hero-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+      max-width: 280px;
+      justify-content: center;
+    }
+
+    .hero-stats {
+      gap: 2rem;
+    }
+
+    .floating-card {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+
+    .card-1 {
+      top: 15%;
+      left: 5%;
+    }
+
+    .card-2 {
+      top: 25%;
+      right: 5%;
+    }
+
+    .card-3 {
+      bottom: 25%;
+      left: 5%;
+    }
+
+    .card-4 {
+      bottom: 15%;
+      right: 5%;
+    }
+  }
+</style>
