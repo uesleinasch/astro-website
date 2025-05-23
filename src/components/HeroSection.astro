@@ -176,8 +176,8 @@
         const x = e.clientX;
         const y = e.clientY;
         
-        heroSection.style.setProperty('--cursor-x', `${x - 12}px`);
-        heroSection.style.setProperty('--cursor-y', `${y - 16}px`);
+        heroSection.style.setProperty('--cursor-x', `${x - 75}px`);
+        heroSection.style.setProperty('--cursor-y', `${y - 100}px`);
       });
     }
 
@@ -211,16 +211,17 @@
   .hero-section::before {
     content: '';
     position: fixed;
-    width: 24px;
-    height: 32px;
+    width: 150px;
+    height: 200px;
     border: 2px solid rgba(255, 255, 255, 0.8);
     background: transparent;
     border-radius: 4px;
     pointer-events: none;
+    transform: rotate(40deg) ;
     z-index: 9999;
     opacity: 0;
     transition: opacity 0.2s ease;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(0px);
     box-shadow: 
       0 0 20px rgba(255, 255, 255, 0.2),
       inset 0 0 20px rgba(255, 255, 255, 0.1);
