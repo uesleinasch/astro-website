@@ -1,0 +1,1063 @@
+---
+import SidebarLayout from "../layouts/SidebarLayout.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+// Tipos TypeScript para os dados de download
+interface PlatformDetail {
+  label: string;
+  value: string;
+}
+
+interface DownloadFormat {
+  extension: string;
+  description: string;
+  url: string;
+}
+
+interface Platform {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  isActive: boolean;
+  details: PlatformDetail[];
+  formats?: DownloadFormat[];
+  status?: string;
+  previewDate?: string;
+}
+
+interface SystemRequirement {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+interface InstallationMethod {
+  icon: string;
+  title: string;
+  command: string;
+}
+
+interface SupportLink {
+  icon: string;
+  title: string;
+  description: string;
+  href: string;
+}
+
+// Dados das plataformas
+const platforms: Platform[] = [
+  {
+    id: "linux",
+    name: "Linux",
+    description: "Versão estável para distribuições Linux",
+    icon: "linux",
+    isActive: true,
+    details: [
+      { label: "Tamanho", value: "200mb" },
+      { label: "Formatos", value: ".deb, .tar.gz, .AppImage" },
+      { label: "Versão", value: "v1.0.0" }
+    ],
+    formats: [
+      { extension: "deb", description: "Pacote Debian", url: "/downloads/flashdeck-linux.deb" },
+      { extension: "tar.gz", description: "Arquivo comprimido", url: "/downloads/flashdeck-linux.tar.gz" },
+      { extension: "appimage", description: "AppImage portável", url: "/downloads/flashdeck-linux.AppImage" }
+    ]
+  },
+  {
+    id: "windows",
+    name: "Windows",
+    description: "Versão em desenvolvimento para Windows",
+    icon: "windows",
+    isActive: false,
+    details: [
+      { label: "Status", value: "Em desenvolvimento" },
+      { label: "Previsão", value: "Próximas semanas" }
+    ],
+    status: "Em Breve"
+  }
+];
+
+// Requisitos do sistema
+const systemRequirements: SystemRequirement[] = [
+  {
+    icon: "💻",
+    title: "Sistema Operacional",
+    description: "Ubuntu 18.04+, Debian 10+, Fedora 32+, ou distribuições equivalentes"
+  },
+  {
+    icon: "🧠",
+    title: "Memória RAM",
+    description: "Mínimo 512MB, recomendado 1GB"
+  },
+  {
+    icon: "💾",
+    title: "Espaço em Disco",
+    description: "10MB para instalação + espaço para dados"
+  }
+];
+
+// Métodos de instalação
+const installationMethods: InstallationMethod[] = [
+  {
+    icon: "📦",
+    title: "Instalação via .deb",
+    command: "sudo dpkg -i flashdeck.deb"
+  },
+  {
+    icon: "📁",
+    title: "Instalação via .tar.gz",
+    command: "tar -xzf flashdeck.tar.gz\n./install.sh"
+  },
+  {
+    icon: "🚀",
+    title: "Execução via AppImage",
+    command: "chmod +x flashdeck.AppImage\n./flashdeck.AppImage"
+  }
+];
+
+// Links de suporte
+const supportLinks: SupportLink[] = [
+  {
+    icon: "📚",
+    title: "Documentação",
+    description: "Guias completos e tutoriais",
+    href: "/docs"
+  },
+  {
+    icon: "💬",
+    title: "Suporte",
+    description: "Entre em contato conosco",
+    href: "/support"
+  },
+  {
+    icon: "❓",
+    title: "FAQ",
+    description: "Perguntas frequentes",
+    href: "/faq"
+  }
+];
+
+const currentVersion = "v1.0.0";
+---
+
+<SidebarLayout title="Downloads - FlashDeck" description="Baixe o FlashDeck para sua plataforma favorita">
+  <div class="download-page">
+    <!-- Header Section -->
+    <section class="header-section">
+      <div class="container">
+        <div class="header-content">
+          <h1 class="page-title">Downloads</h1>
+          <p class="page-subtitle">Baixe o FlashDeck e transforme sua forma de estudar</p>
+          <div class="version-info">
+            <span class="version-badge">Versão Atual: {currentVersion}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download Options Section -->
+    <section class="download-section">
+      <div class="container">
+        <div class="platforms-grid">
+          {platforms.map((platform) => (
+            <div class={`platform-card ${platform.isActive ? 'active' : 'coming-soon'}`} data-platform={platform.id}>
+              {!platform.isActive && (
+                <div class="coming-soon-badge">
+                  <span>{platform.status}</span>
+                </div>
+              )}
+              <div class={`platform-icon ${platform.isActive ? '' : 'disabled'}`}>
+                {platform.icon === 'linux' && (
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a3.5 3.5 0 00.424 1.316c.73 1.313 2.373 1.929 3.5 1.929.297 0 .598-.034.897-.09 2.909-.545 5.469-2.12 6.711-5.09.199-.477.3-.952.3-1.41 0-2.615-2.089-4.805-4.667-4.805-.3 0-.589.038-.867.095-.835.173-1.669.65-2.374 1.86-.247.425-.413.973-.413 1.555 0 .865.247 1.29.618 1.29.124 0 .266-.062.371-.155.210-.185.247-.620.124-.929-.062-.155-.155-.310-.155-.620 0-.207.093-.310.186-.310.031 0 .062.031.093.031.031 0 .062-.031.062-.062 0-.031-.031-.093-.093-.124-.031-.031-.093-.031-.124-.031-.031 0-.062.031-.062.062 0 .031.031.062.031.093.031.031.031.093.031.124 0 .155-.062.248-.124.310-.093.093-.186.155-.310.155-.186 0-.310-.124-.310-.341 0-.372.124-.806.310-1.117.620-1.023 1.364-1.488 2.064-1.643.248-.062.496-.093.744-.093 2.251 0 4.09 1.859 4.09 4.133 0 .402-.093.806-.248 1.178-1.116 2.694-3.454 4.09-6.01 4.543-.248.031-.496.062-.744.062-1.023 0-2.499-.558-3.076-1.581a2.5 2.5 0 01-.341-1.117c-.093-.682.031-1.395.248-2.077.527-1.643 1.643-3.17 2.436-4.09.682-.806.868-1.488.93-2.395.062-1.302-.868-5.398 2.8-5.67.155-.012.31-.018.465-.018z" fill="currentColor"/>
+                  </svg>
+                )}
+                {platform.icon === 'windows' && (
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 12V6.75l6-1.32v6.48L3 12zm17-9v8.75l-10 .15V5.21L20 3zM3 13l6 .09v6.81l-6-1.15V13zm17 .25V22l-10-1.91V13.1L20 13.25z" fill="currentColor"/>
+                  </svg>
+                )}
+              </div>
+              <div class="platform-content">
+                <h3>{platform.name}</h3>
+                <p class="platform-description">{platform.description}</p>
+                <div class="platform-details">
+                  {platform.details.map((detail) => (
+                    <div class="detail-item">
+                      <span class="detail-label">{detail.label}:</span>
+                      <span class="detail-value">{detail.value}</span>
+                    </div>
+                  ))}
+                </div>
+                <div class="download-buttons">
+                  {platform.isActive ? (
+                    <>
+                      <button class="btn-download primary" onclick={`downloadPlatform('${platform.id}')`}>
+                        <span class="btn-text">Baixar para {platform.name}</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 15l-4-4h3V4h2v7h3l-4 4z" fill="currentColor"/>
+                          <path d="M20 18v2H4v-2h16z" fill="currentColor"/>
+                        </svg>
+                      </button>
+                      {platform.formats && (
+                        <div class="format-options">
+                          {platform.formats.map((format) => (
+                            <button class="format-btn" onclick={`downloadFormat('${format.extension}')`} title={format.description}>
+                              <span>.{format.extension}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <button class="btn-download disabled" disabled>
+                      <span class="btn-text">{platform.status}</span>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"/>
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Installation Guide Section -->
+    <section class="installation-section">
+      <div class="container">
+        <h2 class="section-title">Instruções de Instalação</h2>
+        <div class="instructions-grid">
+          {installationMethods.map((method) => (
+            <div class="instruction-card">
+              <div class="instruction-icon">{method.icon}</div>
+              <h3>{method.title}</h3>
+              <div class="code-block">
+                <code set:html={method.command.replace('\n', '<br>')}></code>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- System Requirements Section -->
+    <section class="requirements-section">
+      <div class="container">
+        <div class="requirements-content">
+          <h2 class="section-title">Requisitos do Sistema</h2>
+          <div class="requirements-grid">
+            {systemRequirements.map((requirement) => (
+              <div class="requirement-item">
+                <div class="req-icon">{requirement.icon}</div>
+                <div class="req-content">
+                  <h4>{requirement.title}</h4>
+                  <p>{requirement.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support Section -->
+    <section class="support-section">
+      <div class="container">
+        <div class="support-content">
+          <h2 class="section-title">Precisa de Ajuda?</h2>
+          <div class="support-links">
+            {supportLinks.map((link) => (
+              <a href={link.href} class="support-link">
+                <div class="support-icon">{link.icon}</div>
+                <div class="support-text">
+                  <h4>{link.title}</h4>
+                  <p>{link.description}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download Progress Modal -->
+    <div id="downloadModal" class="download-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Iniciando Download</h3>
+        </div>
+        <div class="modal-body">
+          <div class="download-progress">
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+            <p class="progress-text">Preparando download...</p>
+          </div>
+          <div class="download-info">
+            <p>Seu download será iniciado automaticamente.</p>
+            <p>Se não iniciar, <a href="#" id="directDownloadLink">clique aqui</a>.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-neon" onclick="closeModal()">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</SidebarLayout>
+
+<style>
+  /* Main Layout */
+  .download-page {
+    min-height: 100vh;
+    position: relative;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* Header Section */
+  .header-section {
+    padding: 4rem 0 6rem;
+    text-align: center;
+    position: relative;
+    background: var(--bg-primary);
+  }
+
+  .header-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-neon), transparent);
+    opacity: 0.5;
+  }
+
+  .page-title {
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--neon-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+  }
+
+  .page-subtitle {
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .version-info {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .version-badge {
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: var(--neon-purple);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+  }
+
+  /* Download Section */
+  .download-section {
+    padding: 4rem 0;
+    background: var(--bg-secondary);
+    position: relative;
+  }
+
+  .platforms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .platform-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-radius: 20px;
+    padding: 2.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .platform-card.active {
+    border-color: var(--border-neon);
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.3),
+      0 0 30px rgba(139, 92, 246, 0.2);
+  }
+
+  .platform-card.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-neon);
+    opacity: 0.03;
+    z-index: 0;
+  }
+
+  .platform-card.coming-soon {
+    opacity: 0.7;
+    position: relative;
+  }
+
+  .platform-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .coming-soon-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    z-index: 2;
+  }
+
+  .platform-icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: var(--neon-purple);
+    filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.3));
+  }
+
+  .platform-icon.disabled {
+    color: var(--text-muted);
+    filter: none;
+    opacity: 0.5;
+  }
+
+  .platform-content h3 {
+    font-size: 1.75rem;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+
+  .platform-description {
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .platform-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--border-default);
+  }
+
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .detail-label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .detail-value {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  /* Download Buttons */
+  .download-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .btn-download {
+    background: var(--btn-primary-bg);
+    border: 1px solid var(--btn-primary-border);
+    color: var(--text-primary);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-download.primary:hover {
+    background: var(--btn-primary-hover);
+    border-color: var(--neon-purple);
+    box-shadow: 
+      0 0 30px rgba(139, 92, 246, 0.4),
+      0 10px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px) scale(1.02);
+    color: var(--text-primary);
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+  }
+
+  .btn-download.primary:active {
+    animation: download-pulse 0.5s ease;
+  }
+
+  .btn-download.disabled {
+    background: var(--bg-tertiary);
+    border-color: var(--border-muted);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .format-options {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .format-btn {
+    background: transparent;
+    border: 1px solid var(--border-default);
+    color: var(--text-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .format-btn:hover {
+    border-color: var(--border-neon);
+    color: var(--neon-purple);
+    background: rgba(139, 92, 246, 0.05);
+  }
+
+  /* Installation Section */
+  .installation-section {
+    padding: 6rem 0;
+    background: var(--bg-primary);
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    text-align: center;
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--neon-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .instructions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .instruction-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .instruction-card:hover {
+    border-color: var(--border-neon);
+    box-shadow: var(--glow-soft);
+    transform: translateY(-5px);
+  }
+
+  .instruction-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .instruction-card h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+
+  .code-block {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .code-block code {
+    color: var(--neon-cyan);
+    font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  /* Requirements Section */
+  .requirements-section {
+    padding: 6rem 0;
+    background: var(--bg-secondary);
+  }
+
+  .requirements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .requirement-item {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--bg-primary);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-default);
+    transition: all 0.3s ease;
+  }
+
+  .requirement-item:hover {
+    border-color: var(--border-neon);
+    box-shadow: var(--glow-soft);
+  }
+
+  .req-icon {
+    font-size: 2rem;
+    min-width: 2rem;
+  }
+
+  .req-content h4 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 1.125rem;
+  }
+
+  .req-content p {
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Support Section */
+  .support-section {
+    padding: 6rem 0;
+    background: var(--bg-primary);
+  }
+
+  .support-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .support-link {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-default);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    color: inherit;
+  }
+
+  .support-link:hover {
+    border-color: var(--border-neon);
+    box-shadow: var(--glow-soft);
+    transform: translateY(-3px);
+    color: inherit;
+  }
+
+  .support-icon {
+    font-size: 2rem;
+    min-width: 2rem;
+  }
+
+  .support-text h4 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 1.125rem;
+  }
+
+  .support-text p {
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Download Modal */
+  .download-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-neon);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.5),
+      0 0 30px rgba(139, 92, 246, 0.3);
+  }
+
+  .modal-header h3 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .download-progress {
+    margin-bottom: 2rem;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue));
+    width: 0%;
+    transition: width 0.3s ease;
+    animation: progress-glow 2s ease-in-out infinite;
+  }
+
+  .progress-text {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .download-info {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .download-info p {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+
+  .download-info a {
+    color: var(--neon-purple);
+    text-decoration: none;
+  }
+
+  .download-info a:hover {
+    text-decoration: underline;
+  }
+
+  .modal-footer {
+    text-align: center;
+  }
+
+  /* Animations */
+  @keyframes download-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes progress-glow {
+    0%, 100% { box-shadow: 0 0 5px rgba(139, 92, 246, 0.3); }
+    50% { box-shadow: 0 0 15px rgba(139, 92, 246, 0.6); }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 1rem;
+    }
+
+    .platforms-grid {
+      grid-template-columns: 1fr;
+      max-width: 100%;
+    }
+
+    .platform-card {
+      padding: 2rem 1.5rem;
+    }
+
+    .instructions-grid,
+    .requirements-grid,
+    .support-links {
+      grid-template-columns: 1fr;
+    }
+
+    .header-section {
+      padding: 3rem 0 4rem;
+    }
+
+    .installation-section,
+    .requirements-section,
+    .support-section {
+      padding: 4rem 0;
+    }
+
+    .format-options {
+      justify-content: center;
+    }
+
+    .requirement-item,
+    .support-link {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .platform-card {
+      padding: 1.5rem 1rem;
+    }
+
+    .btn-download {
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+    }
+
+    .platform-details {
+      padding: 1rem;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * @typedef {Object} DownloadUrls
+   * @property {string} deb
+   * @property {string} tar.gz
+   * @property {string} appimage
+   */
+
+  /** @type {DownloadUrls} */
+  const downloadUrls = {
+    deb: '/downloads/flashdeck-linux.deb',
+    'tar.gz': '/downloads/flashdeck-linux.tar.gz',
+    appimage: '/downloads/flashdeck-linux.AppImage'
+  };
+
+  /**
+   * Função para baixar uma plataforma específica
+   * @param {string} platformId - ID da plataforma
+   */
+  function downloadPlatform(platformId: string) {
+    if (platformId === 'linux') {
+      downloadLinux();
+    }
+  }
+
+  /**
+   * Função para baixar Linux (formato padrão)
+   */
+  function downloadLinux() {
+    showDownloadModal();
+    // Simular download - em produção, isso faria o download real
+    setTimeout(() => {
+      const link = document.createElement('a');
+      link.href = downloadUrls.deb;
+      link.download = 'flashdeck-linux.deb';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      updateProgress(100);
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
+    }, 1000);
+  }
+
+  /**
+   * Função para baixar formato específico
+   * @param {'deb'|'tar.gz'|'appimage'} format - Formato do arquivo
+   */
+  function downloadFormat(format: keyof typeof downloadUrls) {
+    // Validação de formato
+    const validFormats = ['deb', 'tar.gz', 'appimage'] as const;
+    if (!validFormats.includes(format as any)) {
+      console.error(`Formato não suportado: ${format}`);
+      return;
+    }
+    
+    const url = downloadUrls[format];
+    if (!url) {
+      console.error(`URL não encontrada para o formato: ${format}`);
+      return;
+    }
+    
+    showDownloadModal();
+    setTimeout(() => {
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `flashdeck-linux.${format}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      updateProgress(100);
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
+    }, 1000);
+  }
+
+  /**
+   * Função para mostrar modal de download
+   */
+  function showDownloadModal() {
+    const modal = document.getElementById('downloadModal');
+    if (!modal) {
+      console.error('Modal de download não encontrado');
+      return;
+    }
+    
+    modal.style.display = 'flex';
+    updateProgress(0);
+    
+    // Simular progresso
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += Math.random() * 20;
+      if (progress >= 90) {
+        clearInterval(interval);
+        progress = 90;
+      }
+      updateProgress(progress);
+    }, 200);
+  }
+
+  /**
+   * Função para atualizar progresso
+   * @param {number} percentage - Porcentagem do progresso (0-100)
+   */
+  function updateProgress(percentage: number) {
+    /** @type {HTMLElement | null} */
+    const progressFill = document.querySelector('.progress-fill') as HTMLElement;
+    /** @type {HTMLElement | null} */
+    const progressText = document.querySelector('.progress-text') as HTMLElement;
+    
+    if (!progressFill || !progressText) {
+      console.error('Elementos de progresso não encontrados');
+      return;
+    }
+    
+    progressFill.style.width = percentage + '%';
+    
+    if (percentage === 0) {
+      progressText.textContent = 'Preparando download...';
+    } else if (percentage < 100) {
+      progressText.textContent = `Baixando... ${Math.round(percentage)}%`;
+    } else {
+      progressText.textContent = 'Download concluído!';
+    }
+  }
+
+  /**
+   * Função para fechar modal
+   */
+  function closeModal() {
+    const modal = document.getElementById('downloadModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('downloadModal');
+    
+    // Fechar modal clicando fora
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeModal();
+        }
+      });
+    }
+
+    // Fechar modal com ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+  });
+
+  // Expor funções globalmente para uso inline
+  window.downloadPlatform = downloadPlatform;
+  window.downloadLinux = downloadLinux;
+  window.downloadFormat = downloadFormat;
+  window.closeModal = closeModal;
+</script>
